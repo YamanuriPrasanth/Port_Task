@@ -58,17 +58,29 @@ class Merge(threading.Thread):
             
             self.log_update("Starting The Process")
             self.load_bar=1.0
+
             df1= self.parse_ports_data(self.bat_folder_path)
+            self.log_update("Ports Data Task completed")
             self.load_bar = 2.0
+
             df2= self.parse_interface_data(self.bat_folder_path)
+            self.log_update("Interface Data Task completed")
             self.load_bar = 3.0
+            
             df3= self.parse_data_type_mapping(self.bat_folder_path)
+            self.log_update("Data Type Mapping Task Completed")
             self.load_bar= 4.0
+
             df4= self.parse_flat_extract_data(self.bat_folder_path)
+            self.log_update("Flat Extract Data Task completed")
             self.load_bar = 5.0
+
             df5= self.parse_rte_data(self.bat_folder_path)
+            self.log_update("RTE Data Task Completed")
             self.load_bar = 6.0
+
             df6= self.create_inter_core_data(df4,df5)
+            self.log_update("Inter Core Data Task Completed")
             self.load_bar = 7.0
             excel_output_path=os.path.join(self.bat_folder_path, "Port_Data.xlsx")
             log_output_path=os.path.join(self.bat_folder_path, "Merge.log")
@@ -404,7 +416,7 @@ class LoginFrame(Frame, object):
         self.function_name = "Merge"
         self.developer = "Yamanuri Prasanth"
         self.version = "1.0"
-        self.date = "21/05/2024"
+        self.date = "22/05/2024"
         self.buttons = {"FOLDER INPUT": ["FOLDER", 0, "-fo", r"FOLDER PATH(for input arxml files)"],
                        # "CHECK INPUT": ["CHECKBOX", 1, "-ch", r"CHECKBOX(whether you want or not)"],
                     }
