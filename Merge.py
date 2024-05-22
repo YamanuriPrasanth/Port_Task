@@ -46,8 +46,7 @@ class Merge(threading.Thread):
         #self.writer = pd.ExcelWriter('Merge.xlsx', engine='xlsxwriter')
         self.logger = self.setup_logger("Merge", "Merge.log")
         self.log_update("Running Script In Mode {0}".format(mode))
-        self.log_update("Inputs given")
-        self.log_update(files)
+        self.log_update(f"Inputs given: {files[0]}")
         self.result_path = None
         self.input_folder_path = self.check_path(files[0])
         
