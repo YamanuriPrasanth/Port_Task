@@ -47,8 +47,9 @@ class Merge(threading.Thread):
         self.logger = self.setup_logger("Merge", "Merge.log")
         self.log_update("Running Script In Mode {0}".format(mode))
         self.log_update("Inputs given")
+        self.log_update(files)
         self.result_path = None
-        self.bat_folder_path = self.check_path(files[0])
+        self.input_folder_path = self.check_path(files[0])
         
         if mode == "LOCAL/CMD":
             self.run()
@@ -59,31 +60,31 @@ class Merge(threading.Thread):
             self.log_update("Starting The Process")
             self.load_bar=1.0
 
-            Ports_Data_Frame= self.parse_ports_data(self.bat_folder_path)
+            Ports_Data_Frame= self.parse_ports_data(self.input_folder_path)
             self.log_update("Ports Data Task completed")
             self.load_bar = 2.0
 
-            Interface_Data_Frame= self.parse_interface_data(self.bat_folder_path)
+            Interface_Data_Frame= self.parse_interface_data(self.input_folder_path)
             self.log_update("Interface Data Task completed")
             self.load_bar = 3.0
             
-            Data_Type_Frame= self.parse_data_type_mapping(self.bat_folder_path)
+            Data_Type_Frame= self.parse_data_type_mapping(self.input_folder_path)
             self.log_update("Data Type Mapping Task Completed")
             self.load_bar= 4.0
 
-            Flat_Extract_Data_Frame= self.parse_flat_extract_data(self.bat_folder_path)
+            Flat_Extract_Data_Frame= self.parse_flat_extract_data(self.input_folder_path)
             self.log_update("Flat Extract Data Task completed")
             self.load_bar = 5.0
 
-            RTE_Data_Frame= self.parse_rte_data(self.bat_folder_path)
+            RTE_Data_Frame= self.parse_rte_data(self.input_folder_path)
             self.log_update("RTE Data Task Completed")
             self.load_bar = 6.0
 
             Inter_Core_Data_Frame= self.create_inter_core_data(Flat_Extract_Data_Frame,RTE_Data_Frame)
             self.log_update("Inter Core Data Task Completed")
             self.load_bar = 7.0
-            excel_output_path=os.path.join(self.bat_folder_path, "Port_Data.xlsx")
-            log_output_path=os.path.join(self.bat_folder_path, "Merge.log")
+            excel_output_path=os.path.join(self.input_folder_path, "Port_Data.xlsx")
+            log_output_path=os.path.join(self.input_folder_path, "Merge.log")
             with pd.ExcelWriter(excel_output_path, engine='xlsxwriter') as writer:
                 # Write each DataFrame to a different sheet
                 Ports_Data_Frame.to_excel(writer, index=False, sheet_name="Ports Data")
@@ -95,9 +96,9 @@ class Merge(threading.Thread):
             self.load_bar = 8.0  
             self.log_update("Output excel file is generated at {0}".format(excel_output_path))
             self.log_update("Output log file is generated at {0}".format(log_output_path))
-            self.create_remove_mapping(Inter_Core_Data_Frame, self.bat_folder_path) 
+            self.create_remove_mapping(Inter_Core_Data_Frame, self.input_folder_path) 
             self.load_bar= 9.0
-            self.log_update("Output xml file is generated at {0}".format(os.path.join(self.bat_folder_path, "RemoveMapping.xml")))   
+            self.log_update("Output xml file is generated at {0}".format(os.path.join(self.input_folder_path, "RemoveMapping.xml")))   
             self.load_bar = 10
                
         except BaseException as error:
